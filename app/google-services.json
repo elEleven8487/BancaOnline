@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "655015446040",
+    "project_id": "mibanco-af559",
+    "storage_bucket": "mibanco-af559.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655015446040:android:986322206fda0f0f3d256d",
+        "android_client_info": {
+          "package_name": "com.mibanco"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ9yB5LAx-cGARjnZulkmvDpH1ReQ_XV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
