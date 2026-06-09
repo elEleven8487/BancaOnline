@@ -1,0 +1,771 @@
+
+===== PAGE 1 =====
+DOCUMENTO DE DISEÑO
+MiBancoApp Móvil
+M
+1. Sistema de diseño y convenciones
+2. Diagrama de flujo de navegación
+3. Pantalla 1 — Login
+4. Pantalla 2 — Registro
+5. Pantalla 3 — Datos personales
+6. Pantalla 4 — Home (Dashboard)
+7. Pantalla 5 — Beneficiarios
+8. Pantalla 6 — Cuenta
+9. Pantalla 7 — Transferir · Seleccionar beneficiario
+10. Pantalla 8 — Transferir · Monto y concepto
+Especificación visual y de constraints para el desarrollo en
+Android (ConstraintLayout / LinearLayout). Material de
+referencia para alumnos del curso.
+C O N T E N I D O
+Android nativo ConstraintLayout / LinearLayout dp / sp 1.0
+P L A T A F O R M A
+L A Y O U T S
+U N I D A D E S
+V E R S I Ó N
+
+===== PAGE 2 =====
+MIBANCO · DESIGN DOC 01 · SISTEMA DE DISEÑO
+Sistema de diseño
+Tokens de color, tipografía, espaciado y convenciones de anotación que se usan a lo largo del documento.
+COLORES PRINCIPALES
+Primary Dark#1E40AF
+ Primary#2563EB
+Primary Light#3B82F6
+ Success#10B981
+Texto#0F172A
+ Texto sec.#64748B
+Background#F8FAFC
+ Border#E2E8F0
+TIPOGRAFÍA Y TAMAÑOS
+Display 24sp · bold — Títulos de pantalla
+Title 18sp · semibold — Subtítulos / Saldo
+Body 14sp · regular — Texto general
+Caption 12sp · regular — Labels / Helpers
+Micro 10sp · medium — Tabs / Estados
+ESCALA DE ESPACIADO (8-PT GRID)
+4dp · 8dp · 12dp · 16dp · 24dp · 32dp · 48dp
+COMPONENTES BASE
+Email
+tucorreo@email.com
+TextInputLayout · 56dp alto · radius
+12dp · borde 1.5dp · label flotante 12sp
+Botón primario MaterialButton primary · 56dp alto ·
+radius 12dp · texto blanco semibold
+Botón secundario MaterialButton outlined · borde
+primary · texto primary
+Botón texto TextButton · enlaces / acciones
+secundarias
+CONVENCIONES DE ANOTACIÓN
+En cada mockup encontrarás líneas y medidas en rojo que indican
+constraints (márgenes y separaciones en dp). Los IDs en azul
+corresponden al nombre sugerido del View en el XML.
+Lectura rápida
+- - - - 16dp - - - - separación / margenbtnLogin ID del componente
+match_parent / wrap_content tamaño del View
+
+===== PAGE 3 =====
+MIBANCO · DESIGN DOC 02 · FLUJO DE NAVEGACIÓN
+Flujo de navegación
+Cómo se conectan las pantallas. Las flechas sólidas indican navegación principal, las punteadas indican un retorno o acción secundaria.
+LOGIN
+Pantalla inicial
+Email + Password
+Olvidé contraseña
+REGISTRO
+Crear credenciales
+Email + Password
+Confirmar password
+DATOS PERSONALES
+Información del usuario
+Nombre, apellidos, celular
+Fecha de nacimiento
+HOME · Dashboard
+Saldo, fondear, transferir
+Lista de movimientos
++ Bottom Navigation (3 tabs)
+BENEFICIARIOS
+CRUD + empty state
+Tab del bottom navigation
+CUENTA
+Perfil, foto, configuración
+Tab del bottom navigation
+acceso correcto
+Registrarse volver
+continuar
+finalizar tab
+tab
+↳  Sub-flujo: Transferencia
+SELECCIONAR BENEFICIARIO
+¿A quién transferir?
+Lista de beneficiarios
++ opción "Agregar nuevo"
+MONTO Y CONCEPTO
+¿Cuánto y para qué?
+Monto · valida vs saldo
+Concepto opcional · Transferir
+btnTransferir
+tap
+éx
+volver
+Pantalla post-autenticaciónPantalla pre-autenticaciónSub-flujo de transferenciaRetorno / volver
+Notas para implementación: El cambio entre Home, Beneficiarios y Cuenta se realiza con un único BottomNavigationView y tres Fragments. El flujo
+de Login y Registro se maneja con Activities separadas o un NavGraph dedicado al flujo de autenticación. El sub-flujo de transferencia (en naranja)
+se lanza desde el btnTransferir del Home como un NavGraph aparte (o dos Activities encadenadas) y al completarse vuelve al Home con
+popBackStack mostrando un Snackbar de confirmación. Al completar Datos personales se navega al Home limpiando el back stack.
+
+===== PAGE 4 =====
+MIBANCO · DESIGN DOC 03 · PANTALLA 1 — LOGIN
+Login
+Pantalla de acceso. Permite iniciar sesión con email y contraseña, recuperar contraseña o ir a la pantalla de registro.
+9:41 100%
+M
+MiBanco
+Email
+tucorreo@email.com
+Contraseña
+••••••••
+¿Olvidaste tu contraseña?
+Ingresar
+¿No tienes cuenta? Regístrate
+24dp
+100dp
+96dp
+16
+36dp
+24 24 56dp
+16
+56dp
+16
+30
+56dp
+32dp
+@id/imgLogo
+@id/etEmail
+@id/etPassword
+@id/tvForgotPassword
+@id/btnLogin
+@id/tvGoToRegister
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+imgLogo
+ImageView
+96×96dp · top→parent 124dp · centerHorizontal=parent
+tvAppName
+TextView
+top→imgLogo bottom 16dp · centerHorizontal · 22sp bold
+etEmail
+TextInputLayout
+0dp ancho · start/end→parent 24dp · top→tvAppName
+36dp · 56dp alto
+etPassword
+TextInputLayout
+0dp ancho · start/end→parent 24dp · top→etEmail 16dp ·
+56dp alto · inputType=password
+tvForgotPassword
+TextView
+wrap · end→parent 24dp · top→etPassword 16dp · 12sp ·
+color primary
+btnLogin
+MaterialButton
+0dp ancho · start/end→parent 24dp ·
+top→tvForgotPassword 30dp · 56dp alto
+tvGoToRegister
+TextView
+wrap · centerHorizontal · bottom→parent 32dp · texto
+enriquecido (Spannable) con "Regístrate" en color
+primary
+NAVEGACIÓN
+btnLogin → Validar credenciales → HomeActivity (limpiar back stack)
+tvForgotPassword → ForgotPasswordActivity (fuera de alcance del
+proyecto)
+tvGoToRegister → RegisterActivity
+Tip: Usar ConstraintLayout como root. Envolver el contenido en un
+ScrollView para evitar que el teclado tape los campos.
+
+===== PAGE 5 =====
+MIBANCO · DESIGN DOC 04 · PANTALLA 2 — REGISTRO
+Registro
+Crear cuenta nueva con email y contraseña. Al confirmar, el usuario continúa al formulario de Datos personales.
+9:41
+Crear cuenta
+M
+Regístrate para empezar a usar MiBanco
+Email
+tucorreo@email.com
+Contraseña
+••••••••
+Confirmar contraseña
+••••••••
+Registrarse
+¿Ya tienes cuenta? Iniciar sesión
+24dp
+56dp
+14
+72dp
+22
+22
+24 24 56dp
+16
+56dp
+16
+56dp
+32
+56dp
+32dp
+@id/btnBack
+@id/imgLogo
+@id/etEmail
+@id/etPassword
+@id/etConfirmPassword
+@id/btnRegister
+@id/tvGoToLogin
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+btnBack
+ImageButton
+24×24dp · start→parent 24dp · top→parent 16dp (dentro
+del Toolbar) · ic_arrow_back
+tvToolbarTitle
+TextView
+centerHorizontal · centerVertical en Toolbar · 16sp bold
+imgLogo
+ImageView
+72×72dp · top→Toolbar 14dp · centerHorizontal
+tvSubtitle
+TextView
+top→imgLogo 22dp · centerHorizontal · 13sp · color
+text-secondary
+etEmail
+TextInputLayout
+0dp ancho · start/end 24dp · top→tvSubtitle 22dp · 56dp
+alto
+etPassword
+TextInputLayout
+top→etEmail 16dp · misma anchura ·
+inputType=password
+etConfirmPassword
+TextInputLayout
+top→etPassword 16dp · misma anchura ·
+inputType=password
+btnRegister
+MaterialButton
+top→etConfirmPassword 32dp · 0dp ancho · start/end
+24dp · 56dp alto
+tvGoToLogin
+TextView
+centerHorizontal · bottom→parent 32dp · Spannable
+VALIDACIONES
+· Email con formato válido
+· Password mínimo 8 caracteres
+· Password = ConfirmPassword
+· Mostrar error en el TextInputLayout (setError)
+NAVEGACIÓN
+btnBack → finish() (regresa a Login)
+btnRegister → validar → DatosPersonalesActivity
+tvGoToLogin → finish()
+
+===== PAGE 6 =====
+MIBANCO · DESIGN DOC 05 · PANTALLA 3 — DATOS PERSONALES
+Datos personales
+Captura de información del usuario después del registro. Al completar, se navega al Home limpiando el back stack.
+9:41
+Datos personales
+Paso 2 de 2 · Completa tu perfil
+Cuéntanos un poco sobre ti
+Nombre(s)
+María
+Apellidos
+González Ramírez
+Número de celular
++52 55 1234 5678 📱
+Fecha de nacimiento
+15 / 03 / 1995
+Toca para abrir el calendario
+Continuar
+24dp
+56dp
+18
+24 24 56dp
+16
+56dp
+16
+56dp
+16
+56dp
+56dp
+12
+@id/btnBack
+@id/progressIndicator
+@id/etNombre
+@id/etApellidos
+@id/etCelular
+@id/etFechaNacimiento
+@id/btnContinuar
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+btnBack
+ImageButton
+start→parent 24dp · centerVertical en Toolbar
+progressIndicator
+LinearProgressIndicator
+0dp ancho · start/end 24dp · top→Toolbar 18dp ·
+progress=100
+etNombre
+TextInputLayout
+top→tvSection 12dp · 0dp ancho · start/end
+24dp · 56dp · inputType=textPersonName
+etApellidos
+TextInputLayout
+top→etNombre 16dp · idénticos constraints
+horizontales
+etCelular
+TextInputLayout
+top→etApellidos 16dp · inputType=phone ·
+maxLength 14
+etFechaNacimiento
+TextInputLayout
+top→etCelular 16dp · focusable=false ·
+clickable=true · endIcon=calendar · abre
+MaterialDatePicker
+btnContinuar
+MaterialButton
+0dp ancho · start/end 24dp · bottom→parent
+12dp · 56dp alto
+PATRÓN "BOTÓN ABAJO"
+El botón btnContinuar queda anclado al borde inferior. Los campos van dentro
+de un ScrollView entre el progress indicator y el botón para no taparlo cuando
+aparezca el teclado.
+NAVEGACIÓN
+btnBack → regresa a Registro
+btnContinuar → guardar perfil → HomeActivity con flag
+FLAG_ACTIVITY_CLEAR_TASK | NEW_TASK
+
+===== PAGE 7 =====
+MIBANCO · DESIGN DOC 06 · PANTALLA 4 — HOME (DASHBOARD)
+Home — Dashboard
+Pantalla principal con saldo, accesos rápidos (fondear/transferir) y lista de movimientos. Incluye el BottomNavigationView con 3 tabs.
+9:41
+Hola,
+María González M
+Saldo disponible
+$ 12,450.75
+MXN · Cuenta ****8421
+↓ Fondear
+ ↗  Transferir
+Movimientos recientes Ver todos
+Aún no tienes movimientos
+Tus transferencias y depósitos
+aparecerán aquí.
+Inicio Beneficiarios Cuenta
+24dp
+70dp
+22
+24 24
+156dp
+28
+56dp
+@id/tvGreeting + tvUserName @id/imgAvatar
+@id/cardSaldo (CardView)
+@id/tvMovimientosTitle
+@id/layoutEmptyMovimientos
+@id/bottomNav (BottomNavigationView)
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+imgAvatar
+ShapeableImageView
+44×44dp · end→parent 24dp · top→parent 16dp
+· cornerFamily=rounded
+cardSaldo
+CardView
+0dp · start/end 24dp · top→header 22dp ·
+156dp alto · radius 18dp · backgroundTint
+primaryDark
+tvSaldoLabel +
+tvSaldoMonto
+Dentro de cardSaldo · padding 20dp
+btnFondear
+MaterialButton
+Dentro de cardSaldo · 32dp alto · texto color
+primary · fondo blanco ·
+iconStart=ic_arrow_down
+btnTransferir
+MaterialButton
+start→btnFondear end 12dp · style=outlined ·
+texto blanco · borde blanco
+tvMovimientosTitletop→cardSaldo 28dp · start 24dp · 15sp bold
+tvVerTodos end→parent 24dp · alignBaseline
+tvMovimientosTitle
+rvMovimientos
+RecyclerView
+top→tvMovimientosTitle 12dp · 0dp ancho/alto ·
+bottom→bottomNav · LinearLayoutManager
+vertical
+layoutEmptyMovimientos
+LinearLayout (empty)
+Mismo lugar que el RecyclerView ·
+visibility=visible cuando lista vacía ·
+centerInParent del contenedor
+bottomNav
+BottomNavigationView
+0dp ancho · start/end 0dp · bottom→parent 0dp
+· 56dp alto · 3 menu items
+ESTADOS DE LA LISTA
+Vacío: rvMovimientos.visibility = GONE,
+layoutEmpty.visibility = VISIBLE
+Con datos: Inverso al anterior. Cada item: 64dp alto, 16dp padding, ícono
+40dp, descripción + monto.
+NAVEGACIÓN
+btnFondear / btnTransferir → siguientes pantallas (fuera de alcance)
+bottomNav → cambia entre Fragments: HomeFragment ·
+BeneficiariosFragment · CuentaFragment
+
+===== PAGE 8 =====
+MIBANCO · DESIGN DOC 07 · PANTALLA 5 — BENEFICIARIOS
+Beneficiarios
+CRUD de beneficiarios con dos estados: vacío (cuando no hay registros) y con datos (lista). Mismo Fragment, dos vistas conmutables.
+9:41
+Beneficiarios
+Buscar beneficiario...
+A · ESTADO CON DATOS
+JC Juan Carlos López
+BBVA · ****4521
+AS Ana Sofía Méndez
+Banorte · ****8832
+RG Roberto García
+Santander · ****1209
+B · ESTADO VACÍO
+No tienes beneficiarios
+Agrega a las personas a las que
+les transfieres con frecuencia.
+Agregar el primero
+Inicio Beneficiarios Cuenta
+24dp
+70dp
+20
+44dp
+64dp
+8
+44dp
+24 24
+@id/tvTitle @id/btnAddBeneficiario
+@id/etSearch
+@id/rvBeneficiarios + item_beneficiario.xml
+@id/layoutEmptyBeneficiarios
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+tvTitle
+TextView
+start 24dp · top 16dp · 22sp bold
+btnAddBeneficiario
+FloatingActionButton (mini)
+o ImageButton
+40×40dp · end 24dp · alignBaseline tvTitle
+· backgroundTint primary · ic_add
+etSearch
+EditText / TextInputLayout
+0dp ancho · start/end 24dp · top→tvTitle
+20dp · 44dp alto · drawableStart=ic_search
+· background=#F1F5F9
+rvBeneficiarios
+RecyclerView
+0dp · start/end 24dp · top→etSearch 20dp
+· bottom→bottomNav 0dp ·
+LinearLayoutManager ·
+clipToPadding=false
+layoutEmptyBeneficiarios
+LinearLayout vertical
+centerInParent del contenedor (mismo que
+rvBeneficiarios) · gravity=center · padding
+32dp
+btnAgregarPrimero
+MaterialButton
+Dentro de layoutEmpty · 44dp alto · radius
+22dp · iconStart=ic_add
+ITEM DEL RECYCLERVIEW
+item_beneficiario.xml · 64dp alto · ConstraintLayout
+· imgAvatar 40×40dp · circular · start 12dp · centerVertical
+· tvNombre · start→imgAvatar end 12dp · top 12dp · 14sp bold
+· tvBanco · start→imgAvatar end 12dp · top→tvNombre 4dp · 11sp · color
+secondary
+· btnMore · end 12dp · centerVertical · ic_more_vert (abre menú: Editar /
+Eliminar)
+CRUD
+Create: btnAdd / btnAgregarPrimero → AddBeneficiarioActivity (form
+modal)
+Read: RecyclerView con Adapter + ViewHolder
+Update: btnMore → menú "Editar" → AddBeneficiarioActivity en modo
+edición
+Delete: btnMore → menú "Eliminar" → AlertDialog de confirmación
+
+===== PAGE 9 =====
+MIBANCO · DESIGN DOC 08 · PANTALLA 6 — CUENTA
+Cuenta
+Perfil del usuario con foto, datos personales (solo lectura), acceso a configuración y opción de cerrar sesión.
+9:41
+Mi cuenta
+M
+María González R.
+tucorreo@email.com
+INFORMACIÓN PERSONAL
+Nombre completo
+María González Ramírez
+Celular
++52 55 1234 5678
+Fecha de nacimiento
+15 de marzo de 1995
+Configuración
+Notificaciones, privacidad, idioma
+Cerrar sesión
+MiBanco v1.0 · Build 1
+Inicio Beneficiarios Cuenta
+24dp
+56dp
+12
+96dp
+22
+24 24
+156dp
+24
+56dp
+16
+56dp
+@id/tvTitle
+@id/imgAvatar + @id/btnEditPhoto
+@id/cardPersonalInfo
+@id/btnConfiguracion
+@id/btnCerrarSesion
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+tvTitle
+TextView
+centerHorizontal · top 16dp · 22sp bold · texto "Mi
+cuenta"
+imgAvatar
+ShapeableImageView
+96×96dp · top→Toolbar 12dp · centerHorizontal ·
+cornerSize=50% · scaleType=centerCrop
+btnEditPhoto
+ImageButton (FAB
+mini)
+28×28dp · end→imgAvatar end -4dp ·
+bottom→imgAvatar bottom -4dp · ic_camera ·
+backgroundTint primary · borde blanco
+tvUserName
+TextView
+top→imgAvatar 22dp · centerHorizontal · 18sp
+bold
+tvUserEmail
+TextView
+top→tvUserName 4dp · centerHorizontal · 12sp ·
+color secondary
+cardPersonalInfo
+MaterialCardView
+0dp · start/end 24dp · top→tvLabel 8dp · 156dp
+alto · radius 12dp · contiene 3 filas con divisores
+btnConfiguracion
+MaterialCardView
+clickable
+0dp · start/end 24dp · top→cardPersonalInfo 24dp
+· 56dp alto · drawableStart=ic_settings ·
+drawableEnd=ic_chevron
+btnCerrarSesion
+MaterialCardView
+clickable
+top→btnConfiguracion 16dp · 56dp alto ·
+backgroundTint #FEF2F2 · stroke #FECACA ·
+texto color #DC2626 · drawableStart=ic_logout
+tvVersion
+TextView
+centerHorizontal · top→btnCerrarSesion 56dp ·
+10sp · color text-tertiary
+bottomNav
+BottomNavigationView
+0dp · start/end/bottom 0dp · 56dp · tab "Cuenta"
+seleccionado
+COMPORTAMIENTO
+btnEditPhoto: abre selector con opciones Cámara / Galería
+(BottomSheetDialog). Pide permisos READ_MEDIA_IMAGES / CAMERA.
+Carga la imagen con Glide en imgAvatar.
+btnCerrarSesion: muestra AlertDialog de confirmación antes de salir. Limpia
+SharedPreferences/DataStore y navega a LoginActivity con CLEAR_TASK.
+NAVEGACIÓN
+btnConfiguracion → ConfiguracionActivity (fuera de alcance)
+btnCerrarSesion → AlertDialog → LoginActivity (limpiar back stack)
+
+===== PAGE 10 =====
+MIBANCO · DESIGN DOC 09 · PANTALLA 7 — TRANSFERIR · SELECCIONAR BENEFICIARIO
+Transferir · Seleccionar beneficiario
+Paso 1 del flujo de transferencia. El usuario elige un beneficiario existente o agrega uno nuevo. Se accede desde el botón "Transferir" del
+Home.
+9:41
+Transferir
+Paso 1 de 2 · ¿A quién?
+Buscar beneficiario...
+Agregar nuevo beneficiario
+Da de alta a quien quieras enviar
+TUS BENEFICIARIOS
+JC Juan Carlos López
+BBVA · ****4521
+AS Ana Sofía Méndez
+Banorte · ****8832
+RG Roberto García
+Santander · ****1209
+24dp
+56dp
+18
+44dp
+64dp
+64dp
+8
+24 24
+@id/btnBack
+@id/progressIndicator + tvStep
+@id/cardAddNuevo
+@id/rvBeneficiariosSelector
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+btnBack
+ImageButton
+start 24dp · centerVertical en Toolbar ·
+ic_arrow_back
+tvToolbarTitle
+TextView
+centerHorizontal · centerVertical en Toolbar ·
+"Transferir" · 16sp bold
+progressIndicator
+LinearProgressIndicator
+0dp ancho · start/end 24dp · top→Toolbar 18dp
+· progress=50
+tvStep
+TextView
+start 24dp · top→progress 12dp · 11sp · "Paso
+1 de 2 · ¿A quién?"
+etSearch
+EditText
+0dp ancho · start/end 24dp · top→tvStep 20dp ·
+44dp alto · drawableStart=ic_search ·
+background=#F1F5F9
+cardAddNuevo
+MaterialCardView
+clickable
+0dp · start/end 24dp · top→etSearch 24dp ·
+64dp alto · radius 12dp · stroke 1.5dp dashed
+primary · background #EFF6FF
+rvBeneficiariosSelector
+RecyclerView
+0dp · start/end 24dp · top→tvSection 14dp ·
+bottom→parent 16dp · LinearLayoutManager ·
+reutiliza item_beneficiario.xml en modo
+"selección"
+DIFERENCIA VS PANTALLA "BENEFICIARIOS"
+Aunque visualmente se parece a la pantalla del tab Beneficiarios, aquí no hay
+menú "more" ( ⋮ ) en cada item — al tap se selecciona y avanza al paso 2. El
+item completo es clickable, no editable. Se puede reusar el adapter con un
+parámetro mode = SELECT.
+ESTADOS
+Sin beneficiarios: mostrar solo la card "Agregar nuevo" y un texto "Aún no
+tienes beneficiarios. Agrega al primero para transferir."
+Búsqueda sin resultados: "Ningún beneficiario coincide con tu búsqueda."
+NAVEGACIÓN
+btnBack → finish() (regresa al Home)
+cardAddNuevo → AddBeneficiarioActivity (modo creación) → al volver,
+refresca la lista
+tap en item → MontoTransferenciaFragment con el ID del beneficiario por
+argumento (Bundle / SafeArgs)
+
+===== PAGE 11 =====
+MIBANCO · DESIGN DOC 10 · PANTALLA 8 — TRANSFERIR · MONTO Y CONCEPTO
+Transferir · Monto y concepto
+Paso 2 del flujo. El usuario captura el monto (validado contra el saldo disponible) y un concepto opcional. Al confirmar se ejecuta la
+transferencia.
+9:41
+Transferir
+Paso 2 de 2 · Monto y concepto
+PARA
+JC Juan Carlos López
+BBVA · ****4521 Cambiar
+¿Cuánto vas a transferir?
+$ 1,500.00
+Saldo disponible: $12,450.75 MXN
+SUGERIDOS
+$500 $1,000 $1,500 $5K
+Concepto (opcional)
+Renta de marzo
+14 / 50
+Transferir $1,500.00
+24dp
+56dp
+64dp24 24
+30
+32dp
+32dp
+56dp
+56dp
+12
+@id/btnBack
+@id/cardBeneficiarioSeleccionado
+@id/etMonto (display)
+@id/tvSaldoDisponible
+@id/etConcepto
+@id/btnTransferir
+ELEMENTOS Y CONSTRAINTS
+ID / Tipo Constraints
+cardBeneficiarioSeleccionado
+MaterialCardView
+0dp · start/end 24dp · top→tvStep 20dp ·
+64dp alto · clickable=true (al tap regresa
+al paso 1)
+tvLabelPara
+TextView
+start 16dp · top 8dp dentro de la card ·
+10sp letterSpacing 0.1 · "PARA"
+btnCambiar
+TextButton
+end 12dp · centerVertical en card · texto
+color primary · 11sp bold
+tvAmountLabel top→cardBeneficiario 30dp ·
+centerHorizontal · 12sp · "¿Cuánto vas a
+transferir?"
+etMonto
+EditText (custom display)
+centerHorizontal · top→tvAmountLabel
+14dp · 46sp bold ·
+inputType=numberDecimal · prefijo "$" ·
+format
+NumberFormat.getCurrencyInstance(...)
+al perder foco
+tvSaldoDisponible
+TextView (chip)
+centerHorizontal · top→etMonto 22dp ·
+32dp alto · drawableStart=ic_check_circle
+· background pill verde claro
+chipGroupSugeridos
+ChipGroup
+0dp ancho · start/end 24dp ·
+top→tvSaldoDisponible 38dp ·
+singleSelection=true · cada Chip 32dp alto
+etConcepto
+TextInputLayout
+0dp · start/end 24dp · top→chipGroup
+30dp · 56dp · counter=true ·
+counterMax=50 · helper="Opcional"
+btnTransferir
+MaterialButton
+0dp · start/end 24dp · bottom→parent
+12dp · 56dp alto · texto dinámico
+"Transferir $X" · enabled solo si monto
+válido
+VALIDACIÓN DE SALDO
+En cada cambio del campo monto:
+· Si monto > saldo → chip cambia a fondo #FEF2F2 con icono ⚠  rojo y texto
+"El monto excede tu saldo". btnTransferir.isEnabled = false
+· Si monto ≤ 0 → chip neutro, botón deshabilitado
+· Si monto válido → chip verde como en el mockup, botón habilitado
+Tip: usa un TextWatcher sobre etMonto y/o un ViewModel con
+StateFlow<TransferenciaUiState>.
+NAVEGACIÓN
+btnBack / cardBeneficiarioSeleccionado tap → regresa a Seleccionar
+beneficiario
+chipGroupSugeridos → autocompleta etMonto
+btnTransferir → AlertDialog de confirmación → API call → Snackbar de
+éxito → popBackStack al Home (refrescando saldo y movimientos)

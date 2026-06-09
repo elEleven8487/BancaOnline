@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.curso.banca.ui.home.HomeFragment"
+        android:label="@string/inicio" />
+    <fragment
+        android:id="@+id/beneficiariosFragment"
+        android:name="com.curso.banca.ui.beneficiarios.BeneficiariosFragment"
+        android:label="@string/beneficiarios" />
+    <fragment
+        android:id="@+id/cuentaFragment"
+        android:name="com.curso.banca.ui.cuenta.CuentaFragment"
+        android:label="@string/cuenta" />
+    <fragment
+        android:id="@+id/seleccionarBeneficiarioFragment"
+        android:name="com.curso.banca.ui.transferir.SeleccionarBeneficiarioFragment"
+        android:label="@string/transferir">
+        <action
+            android:id="@+id/action_select_to_amount"
+            app:destination="@id/montoTransferenciaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/montoTransferenciaFragment"
+        android:name="com.curso.banca.ui.transferir.MontoTransferenciaFragment"
+        android:label="@string/transferir" />
+</navigation>

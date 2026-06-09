@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MiBanco</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="login">Ingresar</string>
+    <string name="register">Registrarse</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="personal_data">Datos personales</string>
+    <string name="continue_action">Continuar</string>
+    <string name="inicio">Inicio</string>
+    <string name="beneficiarios">Beneficiarios</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="transferir">Transferir</string>
+    <string name="fondear">Fondear</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+</resources>

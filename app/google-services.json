@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "111669063079",
+    "project_id": "bankapp-e47b0",
+    "storage_bucket": "bankapp-e47b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111669063079:android:de1d2df41ee979fe4b9a82",
+        "android_client_info": {
+          "package_name": "com.curso.banca"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvxfH70cVUkvNWeXFWR7VxYUTyx5SKzRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
